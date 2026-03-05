@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JarExecutavel:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JarExecutavel_jar</output-path>
+    <root id="archive" name="JarExecutavel.jar">
+      <element id="module-output" name="JarExecutavel" />
+    </root>
+  </artifact>
+</component>
