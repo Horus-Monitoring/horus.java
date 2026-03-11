@@ -1,5 +1,5 @@
 package com.sptech.school;
-
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.Scanner;
@@ -43,23 +43,25 @@ public class JarFinal {
 
     void logHardware() {
         Random numero = new Random();
-        double valorCPU = numero.nextInt(101);
-        double valorRam = numero.nextInt(101);
+        double valorCPU = numero.nextInt(70, 101);
+        double valorDisco = numero.nextInt(60,101);
 
         LocalDateTime agora = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dataFormatada = agora.format(formatter);
 
         if (tipoServer == 1 && (valorCPU >= 80)) {
             System.out.println("Métrica Atual: " + valorCPU + "%");
-            System.out.println("ALERTA CRÍTICO! Uso de CPU elevado! - " + agora);
-        } else if (tipoServer == 2 && (valorRam >= 70)) {
-            System.out.println("Métrica Atual - RAM: " + valorRam  + "%");
-            System.out.println("ALERTA CRÍTICO!Uso de RAM elevado - " + agora);
+            System.out.println("ALERTA CRÍTICO! Uso de CPU elevado! - " + dataFormatada);
+        } else if (tipoServer == 2 && (valorDisco >= 70)) {
+            System.out.println("Métrica Atual - RAM: " + valorDisco  + "%");
+            System.out.println("ALERTA CRÍTICO!Uso de Disco elevado - " + dataFormatada);
         } else {
             if (tipoServer == 1) {
                 System.out.println("Métrica Atual - CPU: " + valorCPU + "%");
                 System.out.println("Situação: Estável.");
             } else {
-                System.out.println("Métrica Atual: " + valorRam  + "%");
+                System.out.println("Métrica Atual: " + valorDisco  + "%");
                 System.out.println("Situação: Estável.");
             }
         }
