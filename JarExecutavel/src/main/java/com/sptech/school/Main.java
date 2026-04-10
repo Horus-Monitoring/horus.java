@@ -4,15 +4,16 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
-      JarFinal log1 = new JarFinal("Júlio Dantas", "ADM", "Conectado");
+      JarFinal log = new JarFinal();
 
-        log1.iniciar();
+        log.logHardware();
 
         while (true){
-            log1.logHardware();
+            log.logHardware();
             System.out.println();
             Thread.sleep(10000);
         }
+
     }
 
 }
