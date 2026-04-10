@@ -1,4 +1,6 @@
 package com.sptech.school;
+import com.sun.source.tree.BreakTree;
+
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -9,9 +11,11 @@ public class JarFinal {
     public static final String[] severidades = {"Crítica","Alta","Média", "Baixa"};
     public static final String[] status = {"Online", "Offline", "Atenção", "Crítico"};
     public static final String[] componentes = {"CPU", "RAM", "Disco"};
-    public static final String[] servidores = {"[Tag servidor] [IP]", "[Tag servidor] [IP]", "[Tag servidor] [IP]"};
+    public static final String[] servidores = {"[Servidor 1] [ip : 192.168.1.1]",
+            "[Servidor 2] [ip : 192.168.1.2]",
+            "[Servidor 3] [ip : 192.168.1.3]"};
 
-    void logHardware() {
+    public String logHardware() {
         Random random = new Random();
         double valorComponente = random.nextInt(0, 101);
         double limite = 70.0;
@@ -52,8 +56,12 @@ public class JarFinal {
         }
 
         if(gerarIndidente){
-            System.out.println(tempoReal + tipoComponete + nivelStatus + nivelChamado);
+            String mensagem = "Severidade do incidente: " + nivelChamado + "\n" + servidor + "\nStatus do servidor: " +
+                    nivelStatus + "\n" + tipoComponete + " está com " + valorComponente + "% de uso\n";
+
+            return mensagem;
         }
+        return null;
     }
 }
 

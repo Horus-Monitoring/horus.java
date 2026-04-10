@@ -10,7 +10,6 @@ public class Main {
 
         while (true){
             log.logHardware();
-            System.out.println();
             Thread.sleep(10000);
         }
 

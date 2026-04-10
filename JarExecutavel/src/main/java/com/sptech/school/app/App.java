@@ -1,6 +1,8 @@
 package com.sptech.school.app;
 
+import com.sptech.school.JarFinal;
 import com.sptech.school.config.Slack;
+import com.sptech.school.JarFinal;
 import java.io.IOException;
 import org.json.JSONObject;
 
@@ -11,8 +13,14 @@ public class App {
 
         JSONObject json = new JSONObject();
 
-        json.put("text", "Fácil né? :shrug:");
+        JarFinal log = new JarFinal();
 
-        Slack.sendMessage(json);
+        while (true){
+            json.put("text", log.logHardware());
+            Thread.sleep(10000);
+
+            Slack.sendMessage(json);
+        }
+
     }
 }
