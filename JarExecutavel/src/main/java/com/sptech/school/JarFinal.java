@@ -8,7 +8,11 @@ import java.util.Scanner;
 
 public class JarFinal {
 
-    public static final String[] severidades = {"Crítica","Alta","Média", "Baixa"};
+    String nivelChamado = severidades[0];
+    String nivelStatus = status[0];
+    String evento;
+
+    public static final String[] severidades = {"Highest","High","Medium", "Low"};
     public static final String[] status = {"Online", "Offline", "Atenção", "Crítico"};
     public static final String[] componentes = {"CPU", "RAM", "Disco"};
     public static final String[] servidores = {"[Servidor 1] [ip : 192.168.1.1]",
@@ -17,15 +21,13 @@ public class JarFinal {
 
     public String logHardware() {
         Random random = new Random();
-        double valorComponente = random.nextInt(0, 101);
+        double valorComponente = random.nextDouble(0, 101);
         double limite = 70.0;
         boolean gerarIndidente = false;
 
         DateTimeFormatter data_hora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         String tempoReal = LocalDateTime.now().format(data_hora);
-        String nivelChamado = severidades[0];
-        String nivelStatus = status[0];
         String tipoComponete = componentes[random.nextInt(componentes.length)];
         String servidor = servidores[random.nextInt(servidores.length)];
 
@@ -56,12 +58,31 @@ public class JarFinal {
         }
 
         if(gerarIndidente){
-            String mensagem = "Severidade do incidente: " + nivelChamado + "\n" + servidor + "\nStatus do servidor: " +
-                    nivelStatus + "\n" + tipoComponete + " está com " + valorComponente + "% de uso\n";
+            String valorFormatado = String.format("%.2f", valorComponente);
 
+            String mensagem = "Severidade do incidente: " + nivelChamado + "\n" + servidor + "\nStatus do servidor: " +
+                    nivelStatus + "\n" + tipoComponete + " está com " + valorFormatado + "% de uso\n";
+
+            evento = tipoComponete + " está com " + valorFormatado + "% de uso";
             return mensagem;
         }
         return null;
+    }
+
+    public String getEvento() {
+        return evento;
+    }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
+    }
+
+    public String getNivelChamado() {
+        return nivelChamado;
+    }
+
+    public void setNivelChamado(String nivelChamado) {
+        this.nivelChamado = nivelChamado;
     }
 }
 
