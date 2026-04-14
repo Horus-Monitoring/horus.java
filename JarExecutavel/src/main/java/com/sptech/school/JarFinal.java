@@ -51,7 +51,7 @@ public class JarFinal {
             nivelStatus = status[3]; // crítico
             nivelChamado = severidades[1]; // alta
             gerarIndidente = true;
-        }else if(valorComponente >= limite){
+        } else if (valorComponente >= limite){
             nivelStatus = status[3]; // crítico
             nivelChamado = severidades[0]; // crítica
             gerarIndidente = true;
@@ -73,16 +73,9 @@ public class JarFinal {
         return evento;
     }
 
-    public void setEvento(String evento) {
-        this.evento = evento;
-    }
-
     public String getNivelChamado() {
         return nivelChamado;
     }
 
-    public void setNivelChamado(String nivelChamado) {
-        this.nivelChamado = nivelChamado;
-    }
 }
 
