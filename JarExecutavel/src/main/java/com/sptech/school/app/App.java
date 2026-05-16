@@ -5,6 +5,8 @@ import com.sptech.school.config.Jira;
 import com.sptech.school.config.Slack;
 import com.sptech.school.JarFinal;
 import java.io.IOException;
+
+import com.sptech.school.service.RelatorioService;
 import org.json.JSONObject;
 
 
@@ -12,7 +14,9 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        JSONObject json = new JSONObject();
+        RelatorioService relatorio = new RelatorioService();
+        relatorio.gerarRelatorio();
+        /*JSONObject json = new JSONObject();
 
         String baseUrl = "https://horusmonitoring.atlassian.net";
         String email = "horusmonitoring@outlook.com.br";
@@ -36,7 +40,7 @@ public class App {
 
             Slack.sendMessage(json);
             Thread.sleep(10000);
-        }
+        }*/
 
     }
 }
