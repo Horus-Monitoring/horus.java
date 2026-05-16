@@ -16,7 +16,7 @@ public class App {
 
         String baseUrl = "https://horusmonitoring.atlassian.net";
         String email = "horusmonitoring@outlook.com.br";
-        String apiToken = "INSIRA O TOKEN";
+        String apiToken = "";
         Jira jira = new Jira(baseUrl, email, apiToken);
 
         while (true){
