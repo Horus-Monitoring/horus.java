@@ -21,7 +21,7 @@ public class App {
         MySQLConnection conexao = new MySQLConnection();
         RelatorioRepository data = new RelatorioRepository();
         RelatorioService relatorio = new RelatorioService();
-        System.out.println(relatorio.gerarTexto(data.buscarDados("lucas@horus.com")));
+        System.out.println(relatorio.gerarTexto(data.buscarDados("mariana@horus.com", "Nathan")));
 
         /*JSONObject json = new JSONObject();
 

@@ -1,14 +1,6 @@
 package com.sptech.school.service;
 
-import com.sptech.school.config.MySQLConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RelatorioData {
     // funcionário
@@ -72,112 +64,56 @@ public class RelatorioData {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getCpf() {
         return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getFuncao() {
         return funcao;
     }
 
-    public void setFuncao(String funcao) {
-        this.funcao = funcao;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getRazaoSocial() {
         return razaoSocial;
     }
 
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
-    }
-
     public String getHostname() {
         return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
     }
 
     public String getMacAddress() {
         return macAddress;
     }
 
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
-    }
-
     public String getStatusServidor() {
         return statusServidor;
-    }
-
-    public void setStatusServidor(String statusServidor) {
-        this.statusServidor = statusServidor;
     }
 
     public String getTipoComponente() {
         return tipoComponente;
     }
 
-    public void setTipoComponente(String tipoComponente) {
-        this.tipoComponente = tipoComponente;
-    }
-
     public Double getLimite() {
         return limite;
-    }
-
-    public void setLimite(Double limite) {
-        this.limite = limite;
     }
 
     public String getUnidadeMedida() {
         return unidadeMedida;
     }
 
-    public void setUnidadeMedida(String unidadeMedida) {
-        this.unidadeMedida = unidadeMedida;
-    }
-
     public LocalDateTime getDataAlerta() {
         return dataAlerta;
-    }
-
-    public void setDataAlerta(LocalDateTime dataAlerta) {
-        this.dataAlerta = dataAlerta;
     }
 
     public String getCriticidade() {
         return criticidade;
     }
 
-    public void setCriticidade(String criticidade) {
-        this.criticidade = criticidade;
-    }
-
     public String getStatusAlerta() {
         return statusAlerta;
-    }
-
-    public void setStatusAlerta(String statusAlerta) {
-        this.statusAlerta = statusAlerta;
     }
 
     @Override
