@@ -42,26 +42,26 @@ public class RelatorioService {
         return leitor.readTree(caminho.toFile());
     }
 
-    public String gerarTexto (JsonNode json, List<RelatorioData> mysql){
+    public String gerarTexto(JsonNode json, List<RelatorioData> mysql) {
 
         RelatorioData infosUsuario = mysql.getFirst();
-        StringBuilder logDeAlertas = new StringBuilder();
+        StringBuilder relatorioFinal = new StringBuilder();
 
-        String informacoes = """
-                 Relatório de Mudança de Turno
-               
-               
-                Usuário solicitante: %s.
-                CPF: %s.
-                Email: %s.
-                Função: %s da %s.
+        relatorioFinal.append(String.format(
+                """
+                Relatório de Mudança de Turno
+                
+                Usuário solicitante: %s
+                CPF: %s
+                Email: %s
+                Função: %s da %s
                 
                 ----- Informações do Servidor -----
-                Mac Address: %s.
-                Nome: %s.
-                Status do Servidor: %s.
+                Mac Address: %s
+                Nome: %s
+                Status do Servidor: %s
                 
-                """.formatted(
+                """,
                 infosUsuario.getNome(),
                 infosUsuario.getCpf(),
                 infosUsuario.getEmail(),
@@ -70,62 +70,69 @@ public class RelatorioService {
                 infosUsuario.getMacAddress(),
                 infosUsuario.getHostname(),
                 infosUsuario.getStatusServidor()
-        );
-        String metricas = """
-                ---  Métricas nas Últimas 24h   ---
-                Ao longo do último turno, o servidor apresentou %s %% de perda de pacotes.
-                A latência média registrada foi de %s ms, com uma taxa de %s %% de atualização do ADS-B.
-                Dessa forma, %s rotas foram impactadas.
+        ));
+
+        relatorioFinal.append(String.format(
+                """
+                ----- Métricas das Últimas 24h -----
                 
-                A perda de pacotes para cada serviço do SAGITARIO corresponde a:
-                  - Serviço de Rastreamento: %s%%;
-                  - Serviço de Rotas: %s%%;
-                  - Serviço de Correlação: %s%%;
-                  - Serviço de API Gateway: %s%%;
-                  - Serviço de Banco de Dados: %s%%;
-                  - Sync Service: %s%%;
-                -----      Logs de Alertas    -----
-                """.formatted(
-                        json.get("kpis").get("perda_pacotes"),
-                        json.get("kpis").get("latencia_media"),
-                        json.get("kpis").get("adsb_update"),
-                        json.get("kpis").get("rotas_sem_atualizacao"),
-                        json.get("perda_pacotes_servico").get("Rastreamento"),
-                        json.get("perda_pacotes_servico").get("Rotas"),
-                        json.get("perda_pacotes_servico").get("Correlação"),
-                        json.get("perda_pacotes_servico").get("API Gateway"),
-                        json.get("perda_pacotes_servico").get("Banco de Dados"),
-                        json.get("perda_pacotes_servico").get("Sync Service")
-                    );
+                Perda de pacotes: %s%%
+                Latência média: %s ms
+                Taxa ADS-B: %s%%
+                Rotas impactadas: %s
+                
+                Perda por serviço:
+                Rastreamento: %s%%
+                Rotas: %s%%
+                Correlação: %s%%
+                API Gateway: %s%%
+                Banco de Dados: %s%%
+                Sync Service: %s%%
+                
+                ----- Logs de Alertas -----
+                
+                """,
+                json.get("kpis").get("perda_pacotes"),
+                json.get("kpis").get("latencia_media"),
+                json.get("kpis").get("adsb_update"),
+                json.get("kpis").get("rotas_sem_atualizacao"),
+                json.get("perda_pacotes_servico").get("Rastreamento"),
+                json.get("perda_pacotes_servico").get("Rotas"),
+                json.get("perda_pacotes_servico").get("Correlação"),
+                json.get("perda_pacotes_servico").get("API Gateway"),
+                json.get("perda_pacotes_servico").get("Banco de Dados"),
+                json.get("perda_pacotes_servico").get("Sync Service")
+        ));
 
-        DateTimeFormatter dataFormatada = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         for (RelatorioData r : mysql) {
-            String status_servidor = r.getStatusServidor();
-            String tipo = r.getTipoComponente();
-            String limite = r.getLimite().toString();
-            String unidade_medida = r.getUnidadeMedida();
-            String data_alerta = r.getDataAlerta().format(dataFormatada);
-            String criticidade = r.getCriticidade();
-            String status_alerta = r.getStatusAlerta();
 
-            String texto = """
+            relatorioFinal.append(String.format(
+                    """
                     ----------------------------
-                    Em %s, houve um alerta %s, deixado condição do servidor em %s.
-                    O problema ocorreu no componente %s, cujo limite definido é %s %s.
-                    Situação: %s.
-                    """.formatted(
-                            data_alerta,
-                            criticidade,
-                            status_servidor,
-                            tipo,
-                            limite,
-                            unidade_medida,
-                            status_alerta
-                    );
-            logDeAlertas.append(texto);
+                    Data: %s
+                    Criticidade: %s
+                    Status servidor: %s
+                    Componente afetado: %s
+                    Limite definido: %s %s
+                    Situação alerta: %s
+                    
+                    """,
+                    r.getDataAlerta().format(formatter),
+                    r.getCriticidade(),
+                    r.getStatusServidor(),
+                    r.getTipoComponente(),
+                    r.getLimite(),
+                    r.getUnidadeMedida(),
+                    r.getStatusAlerta()
+            ));
         }
 
-        return informacoes + metricas + logDeAlertas;
+        relatorioFinal.append("Fim do relatório.");
+
+        return relatorioFinal.toString().trim();
     }
 
     public Path salvarPDF(String textoRelatorio) throws IOException {
@@ -137,7 +144,7 @@ public class RelatorioService {
 
             //Começando escrita
             try(PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                ;
+
                 contentStream.beginText();
 
                 //Fonte e tamanho do texto
@@ -145,16 +152,23 @@ public class RelatorioService {
                                 Standard14Fonts.FontName.HELVETICA),
                         12);
 
-                //Tem que posicionar o cursor!?
-                contentStream.newLineAtOffset(100, 700);
+                // posição inicial na página
+                contentStream.newLineAtOffset(50, 750);
 
                 //Escrita
-                contentStream.showText(textoRelatorio);
+                String[] linhas = textoRelatorio.split("\n");
 
+                for(String linha : linhas){
+                    contentStream.showText(linha);
+                    contentStream.newLineAtOffset(0, -15);
+                }
+
+                contentStream.endText();
             }
 
             //Salvar Relatório
-            document.save("relatorio.pdf");
+            document.save("relatorio_" + + System.currentTimeMillis()+ "pdf");
+            System.out.println("Documento salvo com sucesso.");
             return Paths.get("relatorio.pdf");
 
         } catch (IOException e) {
