@@ -2,18 +2,20 @@ package com.sptech.school.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
 
 public class RelatorioService {
 
-    public void gerarRelatorio(){
+    public void gerarRelatorio(String relatorio){
         System.out.println("Gerando relatório...");
     }
 
@@ -126,14 +128,48 @@ public class RelatorioService {
         return informacoes + metricas + logDeAlertas;
     }
 
+    public Path salvarPDF(String textoRelatorio) throws IOException {
+        //Criando documento
+        try(PDDocument document = new PDDocument()) {
+            //Criando página
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            //Começando escrita
+            try(PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                ;
+                contentStream.beginText();
+
+                //Fonte e tamanho do texto
+                contentStream.setFont(new PDType1Font(
+                                Standard14Fonts.FontName.HELVETICA),
+                        12);
+
+                //Tem que posicionar o cursor!?
+                contentStream.newLineAtOffset(100, 700);
+
+                //Escrita
+                contentStream.showText(textoRelatorio);
+
+            }
+
+            //Salvar Relatório
+            document.save("relatorio.pdf");
+            return Paths.get("relatorio.pdf");
+
+        } catch (IOException e) {
+            throw new IOException("Erro ao escrever o relatório:" + e);
+        }
+    }
+
 
     /*
 
     buscar o JSON (OK)
     ler o JSON (OK)
-    buscar os dados no BD MySQL
-    juntar dados json e mysql
-    estruturar o texto do relatório
+    buscar os dados no BD MySQL (OK)
+    juntar dados json e mysql (OK)
+    estruturar o texto do relatório (Ok)
     salvar o PDF
     enviar o PDF
     **/

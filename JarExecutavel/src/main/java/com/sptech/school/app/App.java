@@ -28,11 +28,13 @@ public class App {
         List<RelatorioData> dadosBanco = data.buscarDados("mariana@horus.com", "Nathan");
 
         //Buscando dados no JSON
-        RelatorioService relatorio = new RelatorioService();
-        Path caminho = relatorio.buscarJSON();
-        JsonNode json = relatorio.lerJSON(caminho);
+        RelatorioService relatorioService = new RelatorioService();
+        Path caminho = relatorioService.buscarJSON();
+        JsonNode json = relatorioService.lerJSON(caminho);
 
-        System.out.println(relatorio.gerarTexto(json, dadosBanco));
+        String relatorio = relatorioService.gerarTexto(json, dadosBanco);
+
+        System.out.println(relatorioService.salvarPDF(relatorio));
 
         /*JSONObject json = new JSONObject();
 
