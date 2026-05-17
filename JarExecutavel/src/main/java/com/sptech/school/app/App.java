@@ -2,10 +2,12 @@ package com.sptech.school.app;
 
 import com.sptech.school.JarFinal;
 import com.sptech.school.config.Jira;
+import com.sptech.school.config.MySQLConnection;
 import com.sptech.school.config.Slack;
 import com.sptech.school.JarFinal;
 import java.io.IOException;
 
+import com.sptech.school.service.RelatorioData;
 import com.sptech.school.service.RelatorioService;
 import org.json.JSONObject;
 
@@ -14,8 +16,11 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        RelatorioService relatorio = new RelatorioService();
-        relatorio.gerarRelatorio();
+
+        MySQLConnection conexao = new MySQLConnection();
+        RelatorioData data = new RelatorioData();
+        data.buscarDados("ricardo@horus.com");
+
         /*JSONObject json = new JSONObject();
 
         String baseUrl = "https://horusmonitoring.atlassian.net";
