@@ -26,7 +26,7 @@ public class RelatorioService {
         );
         Para buscar na S3?
         */
-        Path caminho = Paths.get("C:/Users/ricar/Downloads/dashboard (1).json");
+        Path caminho = Paths.get("C:\\Users\\ricar\\Downloads\\dashboard (2).json");
         if(Files.exists(caminho)) {
             System.out.println("Arquivo encontrado.");
             return caminho;
@@ -40,7 +40,7 @@ public class RelatorioService {
         return leitor.readTree(caminho.toFile());
     }
 
-    public String gerarTexto (List<RelatorioData> mysql){
+    public String gerarTexto (JsonNode json, List<RelatorioData> mysql){
 
         RelatorioData infosUsuario = mysql.getFirst();
         StringBuilder logDeAlertas = new StringBuilder();
@@ -59,7 +59,6 @@ public class RelatorioService {
                 Nome: %s.
                 Status do Servidor: %s.
                 
-                -----      Logs de Alertas    -----
                 """.formatted(
                 infosUsuario.getNome(),
                 infosUsuario.getCpf(),
@@ -70,6 +69,32 @@ public class RelatorioService {
                 infosUsuario.getHostname(),
                 infosUsuario.getStatusServidor()
         );
+        String metricas = """
+                ---  Métricas nas Últimas 24h   ---
+                Ao longo do último turno, o servidor apresentou %s %% de perda de pacotes.
+                A latência média registrada foi de %s ms, com uma taxa de %s %% de atualização do ADS-B.
+                Dessa forma, %s rotas foram impactadas.
+                
+                A perda de pacotes para cada serviço do SAGITARIO corresponde a:
+                  - Serviço de Rastreamento: %s%%;
+                  - Serviço de Rotas: %s%%;
+                  - Serviço de Correlação: %s%%;
+                  - Serviço de API Gateway: %s%%;
+                  - Serviço de Banco de Dados: %s%%;
+                  - Sync Service: %s%%;
+                -----      Logs de Alertas    -----
+                """.formatted(
+                        json.get("kpis").get("perda_pacotes"),
+                        json.get("kpis").get("latencia_media"),
+                        json.get("kpis").get("adsb_update"),
+                        json.get("kpis").get("rotas_sem_atualizacao"),
+                        json.get("perda_pacotes_servico").get("Rastreamento"),
+                        json.get("perda_pacotes_servico").get("Rotas"),
+                        json.get("perda_pacotes_servico").get("Correlação"),
+                        json.get("perda_pacotes_servico").get("API Gateway"),
+                        json.get("perda_pacotes_servico").get("Banco de Dados"),
+                        json.get("perda_pacotes_servico").get("Sync Service")
+                    );
 
         DateTimeFormatter dataFormatada = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (RelatorioData r : mysql) {
@@ -98,7 +123,7 @@ public class RelatorioService {
             logDeAlertas.append(texto);
         }
 
-        return informacoes + logDeAlertas;
+        return informacoes + metricas + logDeAlertas;
     }
 
 

@@ -1,11 +1,14 @@
 package com.sptech.school.app;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sptech.school.JarFinal;
 import com.sptech.school.config.Jira;
 import com.sptech.school.config.MySQLConnection;
 import com.sptech.school.config.Slack;
 import com.sptech.school.JarFinal;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
 import com.sptech.school.service.RelatorioData;
 import com.sptech.school.service.RelatorioRepository;
@@ -17,11 +20,19 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-
+        //Conexão com MySQL
         MySQLConnection conexao = new MySQLConnection();
+
+        //Buscando dados no MySQL
         RelatorioRepository data = new RelatorioRepository();
+        List<RelatorioData> dadosBanco = data.buscarDados("mariana@horus.com", "Nathan");
+
+        //Buscando dados no JSON
         RelatorioService relatorio = new RelatorioService();
-        System.out.println(relatorio.gerarTexto(data.buscarDados("mariana@horus.com", "Nathan")));
+        Path caminho = relatorio.buscarJSON();
+        JsonNode json = relatorio.lerJSON(caminho);
+
+        System.out.println(relatorio.gerarTexto(json, dadosBanco));
 
         /*JSONObject json = new JSONObject();
 
