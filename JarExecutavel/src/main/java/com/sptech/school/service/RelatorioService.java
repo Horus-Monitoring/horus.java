@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 public class RelatorioService {
 
@@ -40,19 +43,62 @@ public class RelatorioService {
     public String gerarTexto (List<RelatorioData> mysql){
 
         RelatorioData infosUsuario = mysql.getFirst();
+        StringBuilder logDeAlertas = new StringBuilder();
 
-        return """
-                Relatório de Mudança de Turno
+        String informacoes = """
+                 Relatório de Mudança de Turno
                
                
-                Usuário solicitante: %s .
-                Email: %s .
+                Usuário solicitante: %s.
+                CPF: %s.
+                Email: %s.
+                Função: %s da %s.
                 
+                ----- Informações do Servidor -----
+                Mac Address: %s.
+                Nome: %s.
+                Status do Servidor: %s.
                 
+                -----      Logs de Alertas    -----
                 """.formatted(
-                        infosUsuario.getNome(),
-                        infosUsuario.getEmail()
+                infosUsuario.getNome(),
+                infosUsuario.getCpf(),
+                infosUsuario.getEmail(),
+                infosUsuario.getFuncao(),
+                infosUsuario.getRazaoSocial(),
+                infosUsuario.getMacAddress(),
+                infosUsuario.getHostname(),
+                infosUsuario.getStatusServidor()
         );
+
+        DateTimeFormatter dataFormatada = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (RelatorioData r : mysql) {
+            String status_servidor = r.getStatusServidor();
+            String tipo = r.getTipoComponente();
+            String limite = r.getLimite().toString();
+            String unidade_medida = r.getUnidadeMedida();
+            String data_alerta = r.getDataAlerta().format(dataFormatada);
+            String criticidade = r.getCriticidade();
+            String status_alerta = r.getStatusAlerta();
+
+            String texto = """
+                    ----------------------------
+                    Em %s, houve um alerta %s, deixado condição do servidor em %s.
+                    O problema ocorreu no componente %s, cujo limite definido é %s %s.
+                    Situação: %s.
+                    """.formatted(
+                            data_alerta,
+                            criticidade,
+                            status_servidor,
+                            tipo,
+                            limite,
+                            unidade_medida,
+                            status_alerta
+                    );
+            logDeAlertas.append(texto);
+        }
+
+        return informacoes + logDeAlertas;
     }
 
 
