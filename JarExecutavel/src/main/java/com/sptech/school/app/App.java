@@ -8,6 +8,7 @@ import com.sptech.school.JarFinal;
 import java.io.IOException;
 
 import com.sptech.school.service.RelatorioData;
+import com.sptech.school.service.RelatorioRepository;
 import com.sptech.school.service.RelatorioService;
 import org.json.JSONObject;
 
@@ -18,7 +19,7 @@ public class App {
 
 
         MySQLConnection conexao = new MySQLConnection();
-        RelatorioData data = new RelatorioData();
+        RelatorioRepository data = new RelatorioRepository();
         data.buscarDados("ricardo@horus.com");
 
         /*JSONObject json = new JSONObject();
