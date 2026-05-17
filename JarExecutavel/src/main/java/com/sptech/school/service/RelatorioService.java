@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.*;
+import java.util.List;
 
 public class RelatorioService {
 
@@ -36,11 +37,29 @@ public class RelatorioService {
         return leitor.readTree(caminho.toFile());
     }
 
+    public String gerarTexto (List<RelatorioData> mysql){
+
+        RelatorioData infosUsuario = mysql.getFirst();
+
+        return """
+                Relatório de Mudança de Turno
+               
+               
+                Usuário solicitante: %s .
+                Email: %s .
+                
+                
+                """.formatted(
+                        infosUsuario.getNome(),
+                        infosUsuario.getEmail()
+        );
+    }
+
 
     /*
 
-    buscar o JSON
-    ler o JSON
+    buscar o JSON (OK)
+    ler o JSON (OK)
     buscar os dados no BD MySQL
     juntar dados json e mysql
     estruturar o texto do relatório
